@@ -1,31 +1,34 @@
-import settings
-import utils
 
 from sklearn.model_selection import train_test_split
 
+import settings
+import utils
 
-laptop_df = utils.get_dataframe(
-    settings.csv_main_file_path, settings.all_column_names)
 
-ohe = utils.get_encoder()
+if __name__ == "__main__":
 
-features_df = laptop_df[settings.feature_columns]
+    laptop_df = utils.get_dataframe(
+        settings.csv_main_file_path, settings.all_column_names)
 
-encoded_features = utils.encode_features(ohe, features_df)
+    ohe = utils.get_encoder()
 
-target = laptop_df.Price_euros
+    features_df = laptop_df[settings.feature_columns]
 
-# split (= drop) our data in different groups for training and testing
-features_train, features_test, \
-target_train, target_test = train_test_split(
-    encoded_features, target, test_size=10)
+    encoded_features = utils.encode_features(ohe, features_df)
 
-dtc = utils.get_decision_tree_obj()
+    target = laptop_df.Price_euros
 
-utils.fit(features_train, target_train, dtc) # training
+    # split (= drop) our data in different groups for training and testing
+    features_train, features_test, \
+    target_train, target_test = train_test_split(
+        encoded_features, target, test_size=10)
 
-y_predicted = dtc.predict(features_test)
+    dtc = utils.get_decision_tree_obj()
 
-decoded_data = utils.decode_result(features_test, y_predicted, ohe)
+    utils.fit(features_train, target_train, dtc) # training
 
-utils.csv_writer(decoded_data, settings.csv_predicted_file_path)
+    y_predicted = dtc.predict(features_test)
+
+    decoded_data = utils.decode_result(features_test, y_predicted, ohe)
+
+    utils.csv_writer(decoded_data, settings.csv_predicted_file_path)

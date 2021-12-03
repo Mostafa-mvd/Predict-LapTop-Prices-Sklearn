@@ -1,6 +1,8 @@
 import itertools
-import pandas as pd
 import settings
+import csv
+import pandas as pd
+
 
 # Using for classification and regression problems
 from sklearn.tree import DecisionTreeClassifier
@@ -69,3 +71,27 @@ def fit(X_train, y_train, dtc_obj):
     # dtc is decision tree classifier object
     # Build a decision tree classifier from the training set (X, y).
     dtc_obj.fit(X_train, y_train)
+
+
+def csv_writer(data, path):
+    with open(path, "w") as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+
+        head_row = ['Company', 'Product', 'TypeName',
+                    'Inches', 'ScreenResolution', 'Cpu', 'Ram', 'Memory',
+                    'Gpu', 'OpSys', 'Weight', 'PredictedPriceEuro']
+
+        writer.writerow(head_row)
+
+        for dict_data in data:
+            
+            line = [
+                dict_data['Company'], dict_data['Product'], 
+                dict_data['TypeName'], dict_data['Inches'], 
+                dict_data['ScreenResolution'], dict_data['Cpu'], 
+                dict_data['Ram'], dict_data['Memory'], 
+                dict_data['Gpu'], dict_data['OpSys'], 
+                dict_data['Weight'], dict_data['PredictedPriceEuro']
+            ]
+
+            writer.writerow(line)
